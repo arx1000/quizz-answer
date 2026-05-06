@@ -148,7 +148,18 @@ async function autoAnswerQuiz(page, aiAnswers) {
   try {
     await page.click('button[type="submit"]');
     console.log('Submitted');
-  } catch(e) {}
+  } catch(e) {
+    // Try in iframes
+    try {
+      const frames = page.frames();
+      for (const frame of frames) {
+        try {
+          await frame.click('button[type="submit"]', { raises: false });
+        } catch(e) {}
+      }
+    } catch(e) {}
+  }
+}
 }
 
 function parseArgs() {
@@ -197,7 +208,31 @@ async function main() {
     await page.goto(url);
   }
 
-  const text = await page.evaluate(() => document.body.innerText);
+  // Wait a bit for iframes to load
+  await page.waitForTimeout(3000);
+  
+  // Get page text from main page OR iframes
+  let text = '';
+  try {
+    text = await page.evaluate(() => document.body.innerText);
+  } catch(e) {}
+  
+  // Try to get text from all iframes
+  try {
+    const frames = page.frames();
+    console.log('Found ' + frames.length + ' frames');
+    for (let i = 0; i < frames.length; i++) {
+      try {
+        const frameText = await frames[i].evaluate(() => document.body.innerText).catch(() => '');
+        if (frameText && frameText.length > text.length && frameText.length > 100) {
+          console.log('Frame ' + i + ' has more text, using that');
+          text = frameText;
+        }
+      } catch(e) {}
+    }
+  } catch(e) { console.log('Frame error:', e.message); }
+  
+  console.log('Extracted ' + text.length + ' chars');
   let aiAnswers = null;
   if (aiKey && text.length > 10) {
     try {
