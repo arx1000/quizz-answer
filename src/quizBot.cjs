@@ -238,7 +238,7 @@ async function main() {
       const resp = await callAI(aiKey, text);
       console.log('AI raw:', resp.slice(0, 200));
       try { aiAnswers = JSON.parse(resp); console.log('Parsed:', aiAnswers); } 
-      catch(e) { console.log('Parse fail, try text match'); aiAnswers = [{q:'paris',a:'paris'},{q:'4',a:'4'},{q:'earth',a:'earth'}]; }
+      catch(e) { console.log('Parse failed, no answers from AI'); aiAnswers = null; }
     } catch(e) { console.log('AI error:', e.message); }
   }
 
