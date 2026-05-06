@@ -1,0 +1,15 @@
+{
+  "name": "quiz-answer-bot",
+  "version": "1.0.0",
+  "description": "AI-powered quiz bot that uses Groq API to answer quizzes automatically",
+  "main": "src/quizBot.cjs",
+  "scripts": {
+    "start": "node src/quizBot.cjs",
+    "test": "node src/quizBot.cjs --serve test-pages --url real-quiz.html --ai-key YOUR_KEY"
+  },
+  "dependencies": {
+    "playwright": "^1.40.0"
+  },
+  "keywords": ["quiz", "bot", "ai", "automation"],
+  "license": "MIT"
+}

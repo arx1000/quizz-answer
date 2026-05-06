@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head><title>Test Quiz</title></head>
+<body style="font-family:Arial;padding:20px;max-width:600px;margin:auto;">
+<h1>Simple Test Quiz</h1>
+<form id="quiz">
+<p>1. What is the capital of France?</p>
+<label><input type="radio" name="q1" value="london"> London</label><br>
+<label><input type="radio" name="q1" value="paris"> Paris</label><br>
+<label><input type="radio" name="q1" value="berlin"> Berlin</label>
+
+<p>2. What is 2 + 2?</p>
+<label><input type="radio" name="q2" value="3"> 3</label><br>
+<label><input type="radio" name="q2" value="4"> 4</label><br>
+<label><input type="radio" name="q2" value="5"> 5</label>
+
+<p>3. Which is a planet?</p>
+<label><input type="radio" name="q3" value="sun"> Sun</label><br>
+<label><input type="radio" name="q3" value="earth"> Earth</label><br>
+<label><input type="radio" name="q3" value="moon"> Moon</label>
+
+<br><br>
+<button type="submit">Check Answers</button>
+</form>
+<div id="results" style="margin-top:20px;font-weight:bold;"></div>
+<script>
+document.getElementById('quiz').onsubmit = function(e) {
+  e.preventDefault();
+  const answers = {q1:'paris', q2:'4', q3:'earth'};
+  let correct = 0;
+  let form = new FormData(this);
+  let r = '';
+  for(let q in answers) {
+    let userAns = form.get(q);
+    let isCorrect = userAns === answers[q];
+    if(isCorrect) correct++;
+    r += q + ': ' + (isCorrect ? 'CORRECT' : 'WRONG') + '<br>';
+  }
+  r += '<br>Score: ' + correct + '/3';
+  document.getElementById('results').innerHTML = r;
+};
+</script>
+</body>
+</html>
