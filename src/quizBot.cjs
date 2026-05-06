@@ -237,8 +237,20 @@ async function main() {
     try {
       const resp = await callAI(aiKey, text);
       console.log('AI raw:', resp.slice(0, 200));
-      try { aiAnswers = JSON.parse(resp); console.log('Parsed:', aiAnswers); } 
-      catch(e) { console.log('Parse failed, no answers from AI'); aiAnswers = null; }
+      try { 
+        // Try to extract JSON from AI response with newlines
+        const jsonMatch = resp.match(/\[[\s\S]*\]/);
+        if (jsonMatch) {
+          aiAnswers = JSON.parse(jsonMatch[0]);
+          console.log('Parsed:', aiAnswers);
+        } else {
+          console.log('No JSON found in response');
+          aiAnswers = null;
+        }
+      } catch(e) { 
+        console.log('Parse failed:', e.message); 
+        aiAnswers = null; 
+      }
     } catch(e) { console.log('AI error:', e.message); }
   }
 
