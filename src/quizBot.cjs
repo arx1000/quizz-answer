@@ -160,7 +160,6 @@ async function autoAnswerQuiz(page, aiAnswers) {
     } catch(e) {}
   }
 }
-}
 
 function parseArgs() {
   const a = process.argv, r = { url: null, headful: true, serveDir: null, aiKey: null, waitLogin: false, stayOpen: false };
